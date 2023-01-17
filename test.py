@@ -2,7 +2,7 @@
 import face_recognition
 import os
 # %matplotlib inline
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 
 def get_cropped_face(image_file):
@@ -13,17 +13,18 @@ def get_cropped_face(image_file):
     cropped_face = image[a:c,d:b,:]    # 얼굴 영역 박스 좌표를 이용해 얼굴 잘라내기 
     return cropped_face              
     
-image_path = './round1.jpg'
+# image_path = './sh.jpg'
 
 # 얼굴 잘라내는 함수 호출
-cropped_face = get_cropped_face(image_path)
-plt.imshow(cropped_face)    # 잘라낸 이미지 출력
+# cropped_face = get_cropped_face(image_path)
+# plt.imshow(cropped_face)    # 잘라낸 이미지 출력
+# plt.show() # 잘라낸 이미지 확인
 
-dir_path = './'
+dir_path = './img/'
 # file_list = ['round2', 'round3', 'round4', 'round5']
-file_list2 = 'round2.jpg'
-image_file = os.path.join(dir_path, file_list2)
-face = get_cropped_face(image_file)   # 얼굴 영역을 구하는 함수(이전 스텝에서 구현)
+# file_list2 = 'sh.jpg'
+# image_file = os.path.join(dir_path, file_list2)
+# face = get_cropped_face(image_file)   # 얼굴 영역을 구하는 함수(이전 스텝에서 구현)
 
 def get_face_embedding(face):
     return face_recognition.face_encodings(face)   # FaceNet 얼굴 임베딩 모델 이용
@@ -59,7 +60,7 @@ def get_sort_key_func(name1):         # name1은 미리 지정
     return get_distance_from_name1
 
 # 유사한 이미지 찾는 함수
-def get_nearest_face(name, top=5):
+def get_nearest_face(name, top= len(os.listdir(dir_path))-1):
     sort_key_func = get_sort_key_func(name)  
     sorted_faces = sorted(embedding_dict.items(), key=lambda x:sort_key_func(x[0]))   # 얼굴 임베딩 딕셔너리를 오름차순으로 정렬
     
@@ -67,6 +68,7 @@ def get_nearest_face(name, top=5):
           if i == 0:
               continue
           if sorted_faces[i]:
+                print('{}: {}'.format(i,len(sorted_faces[i][0])))
                 print('순위 {} : 이름({}), 거리({})'. format(i, sorted_faces[i][0], sort_key_func(sorted_faces[i][0])))
 
-get_nearest_face('round1')
+get_nearest_face('team7')
